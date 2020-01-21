@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<udm.DeploymentPackage version="{{PACKAGE_VERSION}}" application="AddressBook">
+ <application />
+ <deployables>
+  <jee.War name="/addressbook" file="/addressbook.war"/>
+ </deployables>
+ <dependencyResolution>LATEST</dependencyResolution>
+ <undeployDependencies>false</undeployDependencies>
+</udm.DeploymentPackage>
