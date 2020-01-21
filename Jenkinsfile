@@ -20,12 +20,12 @@ pipeline {
 								junit 'target\\surefire-reports\\*.xml'	
 						}
 				}
-	    			/*stage('Scanning for Security') {
+	    			stage('Scanning for Security') {
 					 steps {
 						fodStaticAssessment bsiToken: 'eyJ0ZW5hbnRJZCI6OTkyNCwidGVuYW50Q29kZSI6IkRYQ18xODAxX0ZNQV85MjY4ODYyMzciLCJyZWxlYXNlSWQiOjgyMTgyLCJwYXlsb2FkVHlwZSI6IkFOQUxZU0lTX1BBWUxPQUQiLCJhc3Nlc3NtZW50VHlwZUlkIjoxNCwidGVjaG5vbG9neVR5cGUiOiJKQVZBL0oyRUUiLCJ0ZWNobm9sb2d5VHlwZUlkIjo3LCJ0ZWNobm9sb2d5VmVyc2lvbiI6IjEuOCIsInRlY2hub2xvZ3lWZXJzaW9uSWQiOjEyLCJhdWRpdFByZWZlcmVuY2UiOiJBdXRvbWF0ZWQiLCJhdWRpdFByZWZlcmVuY2VJZCI6MiwiaW5jbHVkZVRoaXJkUGFydHkiOmZhbHNlLCJpbmNsdWRlT3BlblNvdXJjZUFuYWx5c2lzIjpmYWxzZSwicG9ydGFsVXJpIjoiaHR0cHM6Ly90cmlhbC5mb3J0aWZ5LmNvbS8iLCJhcGlVcmkiOiJodHRwczovL2FwaS50cmlhbC5mb3J0aWZ5LmNvbSIsInNjYW5QcmVmZXJlbmNlIjoiU3RhbmRhcmQiLCJzY2FuUHJlZmVyZW5jZUlkIjoxfQ==', entitlementPreference: 'SingleScanOnly', inProgressScanActionType: 'CancelInProgressScan', overrideGlobalConfig: true, personalAccessToken: 'fortifyondemand', remediationScanPreferenceType: 'RemediationScanIfAvailable', srcLocation: '.', tenantId: 'DXC_1801_FMA_926886237', username: 'tonisundhp@gmail.com'
 						fodPollResults bsiToken: 'eyJ0ZW5hbnRJZCI6OTkyNCwidGVuYW50Q29kZSI6IkRYQ18xODAxX0ZNQV85MjY4ODYyMzciLCJyZWxlYXNlSWQiOjgyMTgyLCJwYXlsb2FkVHlwZSI6IkFOQUxZU0lTX1BBWUxPQUQiLCJhc3Nlc3NtZW50VHlwZUlkIjoxNCwidGVjaG5vbG9neVR5cGUiOiJKQVZBL0oyRUUiLCJ0ZWNobm9sb2d5VHlwZUlkIjo3LCJ0ZWNobm9sb2d5VmVyc2lvbiI6IjEuOCIsInRlY2hub2xvZ3lWZXJzaW9uSWQiOjEyLCJhdWRpdFByZWZlcmVuY2UiOiJBdXRvbWF0ZWQiLCJhdWRpdFByZWZlcmVuY2VJZCI6MiwiaW5jbHVkZVRoaXJkUGFydHkiOmZhbHNlLCJpbmNsdWRlT3BlblNvdXJjZUFuYWx5c2lzIjpmYWxzZSwicG9ydGFsVXJpIjoiaHR0cHM6Ly90cmlhbC5mb3J0aWZ5LmNvbS8iLCJhcGlVcmkiOiJodHRwczovL2FwaS50cmlhbC5mb3J0aWZ5LmNvbSIsInNjYW5QcmVmZXJlbmNlIjoiU3RhbmRhcmQiLCJzY2FuUHJlZmVyZW5jZUlkIjoxfQ==', overrideGlobalConfig: true, personalAccessToken: 'fortifyondemand', pollingInterval: 1, tenantId: 'DXC_1801_FMA_926886237', username: 'tonisundhp@gmail.com'
 					}
-				}*/
+				}
 	    
 				stage('Build and Package') {
 						steps {
@@ -45,47 +45,44 @@ pipeline {
 				    }
 				}*/
 				stage("publish to nexus") {
-					    steps {
+					steps {
+						echo 'publish to nexus'
 						script {
-							    // Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
-							    pom = readMavenPom file: "pom.xml";
-							    // Find built artifact under target folder
-							    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-							    // Print some info from the artifact found
-							    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
-							    // Extract the path from the File found
-							    artifactPath = filesByGlob[0].path;
-							    // Assign to a boolean response verifying If the artifact name exists
-							    artifactExists = fileExists artifactPath;
-							    if(artifactExists) {
+							// Read POM xml file using 'readMavenPom' step , this step 'readMavenPom' is included in: https://plugins.jenkins.io/pipeline-utility-steps
+							pom = readMavenPom file: "pom.xml";
+							// Find built artifact under target folder
+							filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+							// Print some info from the artifact found
+							echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+							// Extract the path from the File found
+							artifactPath = filesByGlob[0].path;
+							// Assign to a boolean response verifying If the artifact name exists
+							artifactExists = fileExists artifactPath;
+							if(artifactExists) {
 								echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
 								nexusArtifactUploader(
-								    nexusVersion: NEXUS_VERSION,
-								    protocol: NEXUS_PROTOCOL,
-								    nexusUrl: NEXUS_URL,
-								    groupId: pom.groupId,
-								    version: pom.version,
-								    repository: NEXUS_REPOSITORY,
-								    credentialsId: NEXUS_CREDENTIAL_ID,
-								    artifacts: [
-									// Artifact generated such as .jar, .ear and .war files.
-									[artifactId: pom.artifactId,
-									classifier: '',
-									file: artifactPath,
-									type: pom.packaging]//,
-									// Lets upload the pom.xml file for additional information for Transitive dependencies
-									/*[artifactId: pom.artifactId,
-									classifier: '',
-									file: "pom.xml",
-									type: "pom"]*/
-								    ]
+									nexusVersion: NEXUS_VERSION,
+									protocol: NEXUS_PROTOCOL,
+									nexusUrl: NEXUS_URL,
+									groupId: pom.groupId,
+									version: pom.version,
+									repository: NEXUS_REPOSITORY,
+									credentialsId: NEXUS_CREDENTIAL_ID,
+									artifacts: [
+										// Artifact generated such as .jar, .ear and .war files.
+										[artifactId: pom.artifactId,
+										classifier: '',
+										file: artifactPath,
+										type: pom.packaging]//,
+										// Lets upload the pom.xml file for additional information for Transitive dependencies
+									]
 								);
-							    } else {
+							} else {
 								error "*** File: ${artifactPath}, could not be found";
-							    }
 							}
-						    }
+							
 						}
+					}
 						stage('Deploy') {
 						    steps {
 							sh 'curl --upload-file target/addressbook.war "http://tomcat:password@10.62.125.9:8083/manager/text/deploy?path=/addressbook&update=true"'
@@ -143,7 +140,7 @@ pipeline {
                 script{
 				def releasedVersion = getReleaseVersion()
                 print releasedVersion
-				withCredentials([usernamePassword(credentialsId: 'gituser', passwordVariable: 'passgit', usernameVariable: 'usergit')]) {
+				withCredentials([usernamePassword(credentialsId: 'githubtoken', passwordVariable: 'passgit', usernameVariable: 'usergit')]) {
    				sh "mvn -B clean release:prepare release:perform -Darguments='-Dmaven.javadoc.skip=true' -Dusername=${usergit} -Dpassword=${passgit} -Dtag=release-${releasedVersion} -DreleaseVersion=${releasedVersion}"
 					}
                 }
@@ -153,7 +150,7 @@ pipeline {
         
         stage('Promote Artifact to UAT ') {
             steps {
-                sh 'curl --upload-file target/addressbook.war "http://tomcat:password@35.245.18.194:8083/manager/text/deploy?path=/addressbook-release&update=true"'
+                sh 'curl --upload-file target/addressbook.war "http://tomcat:password@10.62.125.9:8083/manager/text/deploy?path=/addressbook-release&update=true"'
                 //sh 'curl --upload-file target/addressbook.war "http://tomcat:password@34.93.238.186:8081/manager/text/deploy?path=/addressbook&update=true"'
                 //withCredentials([usernamePassword(credentialsId: 'nexusadmin', passwordVariable: 'pass', usernameVariable: 'user')]) {
                 //    sh 'curl --upload-file target/hello-world-war-1.0.0-SNAPSHOT.war "http://${user}:${pass}@34.93.240.217:8082/manager/text/deploy?path=/hello&update=true"'
@@ -168,7 +165,8 @@ pipeline {
         maven 'maven3.3.9'
         jdk 'openjdk8'
     }
-    environment {
+
+     environment {
         // This can be nexus3 or nexus2
         NEXUS_VERSION = "nexus3"
         // This can be http or https
@@ -179,9 +177,8 @@ pipeline {
         // Repository where we will upload the artifact
         NEXUS_REPOSITORY = "maven-snapshots"
         // Jenkins credential id to authenticate to Nexus OSS
-        NEXUS_CREDENTIAL_ID = "nexus"
-    }
-    
+        NEXUS_CREDENTIAL_ID = "nexusadmin"
+    }   
 
     post {
          always {
