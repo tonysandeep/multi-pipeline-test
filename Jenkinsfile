@@ -128,6 +128,9 @@ pipeline {
 				}*/			
 			
 			stage('Sanity Test') {
+				when {
+					 branch 'master'
+					 }
 			    steps {
 				echo 'clean test'
 				sh 'mvn clean test'
@@ -136,6 +139,9 @@ pipeline {
 			}
         
         stage('Release Artifact Publish to Nexus') {
+		when {
+					 branch 'master'
+					 }
             steps {
                 echo 'Upload artifact to nexus'
                 script{
@@ -150,6 +156,9 @@ pipeline {
         }
         
         stage('Promote Artifact to UAT ') {
+		when {
+					 branch 'master'
+					 }
             steps {
                 sh 'curl --upload-file target/addressbook.war "http://tomcat:password@10.62.125.9:8083/manager/text/deploy?path=/addressbook-release&update=true"'
                 //sh 'curl --upload-file target/addressbook.war "http://tomcat:password@34.93.238.186:8081/manager/text/deploy?path=/addressbook&update=true"'
