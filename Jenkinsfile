@@ -83,6 +83,7 @@ pipeline {
 							
 						}
 					}
+				}
 						stage('Deploy') {
 						    steps {
 							sh 'curl --upload-file target/addressbook.war "http://tomcat:password@10.62.125.9:8083/manager/text/deploy?path=/addressbook&update=true"'
