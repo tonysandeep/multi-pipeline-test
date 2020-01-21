@@ -165,8 +165,8 @@ pipeline {
     }     
         
     tools {
-        maven 'maven'
-        jdk 'javajdk'
+        maven 'maven3.3.9'
+        jdk 'openjdk8'
     }
     environment {
         // This can be nexus3 or nexus2
