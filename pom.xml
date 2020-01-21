@@ -18,8 +18,8 @@
     </properties>
 	<scm>
            <connection>scm:git:https://github.com/tonysandeep/devops.git</connection>
-           <developerConnection>scm:git:https://github.com/tonysandeep/devops.git</developerConnection>
-           <url>https://github.com/tonysandeep/devops.git</url>
+           <developerConnection>scm:git:https://github.com/rakesh635/multi-pipeline-test.git</developerConnection>
+           <url>https://github.com/rakesh635/multi-pipeline-test.git</url>
        <tag>release-2.0</tag>
 	</scm>
    <repositories>
@@ -544,12 +544,12 @@
                         <snapshotRepository>
                             <id>maven-snapshots</id>
                             <name>maven-snapshots</name>
-                            <url>http://35.245.18.194:8084/repository/maven-snapshots/</url>
+                            <url>http://10.62.125.9:8084/repository/maven-snapshots/</url>
                         </snapshotRepository>
                         <repository>
                             <id>maven-releases</id>
                             <name>maven-releases</name>
-                            <url>http://35.245.18.194:8084/repository/maven-releases/</url>
+                            <url>http://10.62.125.9:8084/repository/maven-releases/</url>
                         </repository>
         </distributionManagement>
 </project>
