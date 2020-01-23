@@ -112,7 +112,7 @@ pipeline {
 						echo "waiting for approval"
 						timeout( time: 120, unit: "SECONDS" ){
 						input 'Do you want to proceed to the Deployment?'
-						milestone 1
+						//milestone 1
 									}
 						}
 					} 
@@ -149,7 +149,7 @@ pipeline {
 				def releasedVersion = getReleaseVersion()
                 print releasedVersion
 				withCredentials([usernamePassword(credentialsId: 'githubtoken', passwordVariable: 'passgit', usernameVariable: 'usergit')]) {
-   				sh "mvn -B clean release:prepare release:perform -Darguments='-Dmaven.javadoc.skip=true' -Dusername=${usergit} -Dpassword=${passgit} -Dtag=release-${releasedVersion} -DreleaseVersion=${releasedVersion}"
+   				sh "mvn -B clean release:prepare release:perform -Darguments='-Dmaven.javadoc.skip=true' -Dusername=${usergit} -Dpassword=${passgit} -Dtag=release-${releasedVersion} -DreleaseVersion=${releasedVersion}-RELEASE"
 					}
                 }
 			}
