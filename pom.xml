@@ -17,9 +17,9 @@
             <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
     </properties>
 	<scm>
-           <connection>scm:git:https://github.com/tonysandeep/devops.git</connection>
-           <developerConnection>scm:git:https://github.com/tonysandeep/devops.git</developerConnection>
-           <url>https://github.com/tonysandeep/devops.git</url>
+           <connection>scm:git:https://github.com/tonysandeep/multi-pipeline-test.git</connection>
+           <developerConnection>scm:git:https://github.com/tonysandeep/multi-pipeline-test.gitt</developerConnection>
+           <url>https://github.com/tonysandeep/multi-pipeline-test.git</url>
       	   <tag>release-2.0</tag>
 	</scm>
    <repositories>
