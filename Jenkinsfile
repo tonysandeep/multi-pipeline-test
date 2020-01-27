@@ -39,12 +39,12 @@ pipeline {
 						}
 				}
 
-				stage('Package') {
+				/*stage('Package') {
 				    steps {
 					echo 'Packaging'
 					sh 'mvn package -DskipTests'
 				    }
-				}
+				}*/
 				stage("publish to nexus") {
 					steps {
 						echo 'publish to nexus'
