@@ -85,7 +85,7 @@ pipeline {
 						}
 					}
 				}
-						stage('Deploy') {
+						/*stage('Deploy') {
 						    steps {
 							sh 'curl --upload-file target/addressbook.war "http://tomcat:password@10.62.125.9:8083/manager/text/deploy?path=/addressbook&update=true"'
 							//sh 'curl --upload-file target/addressbook.war "http://tomcat:password@34.93.238.186:8081/manager/text/deploy?path=/addressbook&update=true"'
@@ -100,10 +100,10 @@ pipeline {
 						    steps {
 							 jacoco(execPattern: 'target\\*.exec')
 								}
-						    } 
+						    } */
 		     
 
-				 stage('Release Approval') {
+				/* stage('Release Approval') {
 					 when {
 					 branch 'master'
 					 }
@@ -115,7 +115,7 @@ pipeline {
 						//milestone 1
 									}
 						}
-					} 
+					} */
 
 					/*stage('Staging snapshot version') {
 					    steps {
@@ -128,7 +128,7 @@ pipeline {
 				    }
 				}*/			
 			
-			stage('Sanity Test') {
+			/*stage('Sanity Test') {
 				when {
 					 branch 'master'
 					 }
@@ -137,7 +137,7 @@ pipeline {
 				sh 'mvn clean test'
 
 			    }
-			}
+			}*/
         
         stage('Release Artifact Publish to Nexus') {
 		when {
