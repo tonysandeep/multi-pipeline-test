@@ -4,7 +4,7 @@
     <groupId>com.edurekademo.tutorial</groupId>
     <artifactId>addressbook</artifactId>
     <packaging>war</packaging>
-    <version>2.4</version>
+    <version>2.5-SNAPSHOT</version>
     <name>Vaadin Addressbook example</name>	 
 	<properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +20,7 @@
            <connection>scm:git:https://github.com/tonysandeep/multi-pipeline-test.git</connection>
            <developerConnection>scm:git:https://github.com/tonysandeep/multi-pipeline-test.git</developerConnection>
            <url>https://github.com/tonysandeep/multi-pipeline-test.git</url>
-      	   <tag>release-2.4</tag>
+      	   <tag>release-2.0</tag>
 	</scm>
    <repositories>
         <repository>
