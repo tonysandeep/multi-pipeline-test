@@ -100,17 +100,18 @@ pipeline {
 						 }
 			    steps {
 				echo 'clean test'
+				cleanWs()
 				checkout([  
 							$class: 'GitSCM', 
 							branches: [[name: 'refs/heads/master']], 
 							doGenerateSubmoduleConfigurations: false, 
-							extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'release']], 
+							extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], 
 							submoduleCfg: [], 
 							userRemoteConfigs: [[credentialsId: 'rakeshgitvirtusatoken', url: 'https://github.com/tonysandeep/multi-pipeline-test.git']]
 						])
-				dir('release') {
+				
 					sh 'mvn clean test install'
-					}
+					
 
 			    }
 			}
@@ -120,10 +121,10 @@ pipeline {
 							 branch 'master'
 						 }
 					steps {
-						dir('release') {
+						
 						sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
 						xldCreatePackage artifactsPath: 'target', manifestPath: 'deployit-manifest.xml', darPath: '$JOB_NAME-$BUILD_NUMBER.0.dar'  
-						}
+						
 					}
 			}
 			stage('XLDeploy Release artifact Publish') { 
