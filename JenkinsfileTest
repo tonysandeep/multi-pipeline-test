@@ -1,72 +1,159 @@
-pipeline {
+	pipeline {
     agent { label 'master' }
-	options { skipDefaultCheckout() }	
+	options { skipDefaultCheckout() }
     stages {
-        stage("Checkout SCM") {
-			steps {
-				cleanWs()
-				echo 'checkout scm'
-				checkout scm
-			}
-		}
-		stage("Unit Test") {
-			agent { label 'windows' }
-				steps {
-					cleanWs()
-					checkout scm
-					echo ' Unit Test Stage'
-					bat 'mvn test'
-					junit 'target\\surefire-reports\\*.xml'	
+	 
+                stage("Checkout SCM") {
+					steps {
+								cleanWs()
+								echo 'checkout scm'
+								checkout scm
+						}
 				}
-		}
-		stage('Build and Package') {
-			steps {
-				echo 'Clean Build'
-				sh "ls"
-				sh "pwd"
-				sh "mvn sonar:sonar clean compile package -Dtest=\\!TestRunner* -DfailIfNoTests=false -Dsonar.projectKey=addressbook -Dsonar.host.url=http://10.62.125.4:8085/ -Dsonar.login=f16fabd2605044f38e79e4c0e4bc5f73c55dd144"
-				//sh "mvn sonar:sonar clean compile -Dtest=\\!TestRunner* -DfailIfNoTests=false -Dsonar.projectKey=employee_jdbc -Dsonar.host.url=http://34.93.123.206/ -Dsonar.login=aac7cc7809ddc82ce0070e3f74726c71216936b6"
-				//sh 'mvn clean compile' 
+		stage("Unit Test") {
+					agent { label 'windows' }
+					steps {
+								cleanWs()
+								checkout scm
+								echo ' Unit Test Stage'
+								bat 'mvn test'
+								junit 'target\\surefire-reports\\*.xml'	
+						}
+				}
+	    			/*stage('Scanning for Security') {
+					 steps {
+						fodStaticAssessment bsiToken: 'eyJ0ZW5hbnRJZCI6OTkyNCwidGVuYW50Q29kZSI6IkRYQ18xODAxX0ZNQV85MjY4ODYyMzciLCJyZWxlYXNlSWQiOjgyMTgyLCJwYXlsb2FkVHlwZSI6IkFOQUxZU0lTX1BBWUxPQUQiLCJhc3Nlc3NtZW50VHlwZUlkIjoxNCwidGVjaG5vbG9neVR5cGUiOiJKQVZBL0oyRUUiLCJ0ZWNobm9sb2d5VHlwZUlkIjo3LCJ0ZWNobm9sb2d5VmVyc2lvbiI6IjEuOCIsInRlY2hub2xvZ3lWZXJzaW9uSWQiOjEyLCJhdWRpdFByZWZlcmVuY2UiOiJBdXRvbWF0ZWQiLCJhdWRpdFByZWZlcmVuY2VJZCI6MiwiaW5jbHVkZVRoaXJkUGFydHkiOmZhbHNlLCJpbmNsdWRlT3BlblNvdXJjZUFuYWx5c2lzIjpmYWxzZSwicG9ydGFsVXJpIjoiaHR0cHM6Ly90cmlhbC5mb3J0aWZ5LmNvbS8iLCJhcGlVcmkiOiJodHRwczovL2FwaS50cmlhbC5mb3J0aWZ5LmNvbSIsInNjYW5QcmVmZXJlbmNlIjoiU3RhbmRhcmQiLCJzY2FuUHJlZmVyZW5jZUlkIjoxfQ==', entitlementPreference: 'SingleScanOnly', inProgressScanActionType: 'CancelInProgressScan', overrideGlobalConfig: true, personalAccessToken: 'fortifyondemand', remediationScanPreferenceType: 'RemediationScanIfAvailable', srcLocation: '.', tenantId: 'DXC_1801_FMA_926886237', username: 'tonisundhp@gmail.com'
+						fodPollResults bsiToken: 'eyJ0ZW5hbnRJZCI6OTkyNCwidGVuYW50Q29kZSI6IkRYQ18xODAxX0ZNQV85MjY4ODYyMzciLCJyZWxlYXNlSWQiOjgyMTgyLCJwYXlsb2FkVHlwZSI6IkFOQUxZU0lTX1BBWUxPQUQiLCJhc3Nlc3NtZW50VHlwZUlkIjoxNCwidGVjaG5vbG9neVR5cGUiOiJKQVZBL0oyRUUiLCJ0ZWNobm9sb2d5VHlwZUlkIjo3LCJ0ZWNobm9sb2d5VmVyc2lvbiI6IjEuOCIsInRlY2hub2xvZ3lWZXJzaW9uSWQiOjEyLCJhdWRpdFByZWZlcmVuY2UiOiJBdXRvbWF0ZWQiLCJhdWRpdFByZWZlcmVuY2VJZCI6MiwiaW5jbHVkZVRoaXJkUGFydHkiOmZhbHNlLCJpbmNsdWRlT3BlblNvdXJjZUFuYWx5c2lzIjpmYWxzZSwicG9ydGFsVXJpIjoiaHR0cHM6Ly90cmlhbC5mb3J0aWZ5LmNvbS8iLCJhcGlVcmkiOiJodHRwczovL2FwaS50cmlhbC5mb3J0aWZ5LmNvbSIsInNjYW5QcmVmZXJlbmNlIjoiU3RhbmRhcmQiLCJzY2FuUHJlZmVyZW5jZUlkIjoxfQ==', overrideGlobalConfig: true, personalAccessToken: 'fortifyondemand', pollingInterval: 1, tenantId: 'DXC_1801_FMA_926886237', username: 'tonisundhp@gmail.com'
+					}
+				}*/
+	    
+				stage('Build and Package') {
+						steps {
+								echo 'Clean Build'
+								sh "ls"
+								sh "pwd"
+								//sh "mvn sonar:sonar clean compile package -Dtest=\\!TestRunner* -DfailIfNoTests=false -Dsonar.projectKey=addressbook -Dsonar.host.url=http://10.62.125.9:8085/ -Dsonar.login=f16fabd2605044f38e79e4c0e4bc5f73c55dd144"
+								sh 'mvn package -DskipTests'
+								 
+						}
+				}
+
+				 stage('Test Automation') {
+					steps {
+									echo "test phase"
+						}
+					}
+		     
+
+				/* stage('Release Approval') {
+					 when {
+					 branch 'master'
+					 }
+					steps {
+						echo 'Confirm the deployment'
+						echo "waiting for approval"
+						timeout( time: 120, unit: "SECONDS" ){
+						input 'Do you want to proceed to the Deployment?'
+						//milestone 1
+									}
+						}
+					} */
+
+					stage('Staging Release version') {
+						
+					    steps {
+							echo 'set version to Release'
+						script{
+								def releasedVersion = getReleaseVersion()
+								print releasedVersion
+								sh "mvn versions:set -DnewVersion=${releasedVersion}-RELEASE"
+								echo "commit the release version"
+								sh "mvn versions:commit"
+						
+							}
+						}
+					}		
+			
+			stage('Create the release tag') {
+				
+			    steps {
+				echo 'clean test'
+				script {
+				def releasedVersion = getReleaseVersion()
+				sh 'git status'
+				sh 'git add -- pom.xml'
+				sh "git commit -a -m 'Release${releasedVersion}'"
+				sh "git tag -a ${releasedVersion} -m 'Addressbook release-${releasedVersion}'"
+				sh "git push https://tonysandeep:Qwerty0420@github.com/tonysandeep/multi-pipeline-test.git ${releasedVersion}"
+					}
+
+			    }
 			}
-		}
-		stage("XLDeploy Package") {
-			steps {
-				sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
-				xldCreatePackage artifactsPath: 'target', manifestPath: 'deployit-manifest.xml', darPath: '$JOB_NAME-$BUILD_NUMBER.0.dar'  
+			
+			stage('Sanity Test') {
+				
+			    steps {
+				echo 'clean test'
+				checkout([  
+							$class: 'GitSCM', 
+							branches: [[name: 'refs/heads/master']], 
+							doGenerateSubmoduleConfigurations: false, 
+							extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'release']], 
+							submoduleCfg: [], 
+							userRemoteConfigs: [[credentialsId: 'rakeshgitvirtusatoken', url: 'https://github.com/tonysandeep/multi-pipeline-test.git']]
+						])
+				dir (release) {
+					sh 'mvn clean test install'
+					}
+
+			    }
 			}
-		}
-		stage('XLDeploy Publish') {  
-			steps {
-					xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$JOB_NAME-$BUILD_NUMBER.0.dar'
+        
+			stage("XLDeploy RELEASE Package") {
+					steps {
+						dir (release) {
+						sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
+						xldCreatePackage artifactsPath: 'target', manifestPath: 'deployit-manifest.xml', darPath: '$JOB_NAME-$BUILD_NUMBER.0.dar'  
+						}
+					}
 			}
-		}  
-		stage('XLDeploy Deploy') { 
-			steps {
-					xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: 'Applications/AddressBook/$BUILD_NUMBER.0'
+			stage('XLDeploy Release artifact Publish') {  
+				steps {
+						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$JOB_NAME-$BUILD_NUMBER.0.dar'
+				}
+			}  
+			stage('XLDeploy UAT Deploy') { 
+				steps {
+						xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: 'Applications/AddressBook/$BUILD_NUMBER.0'
+				}
 			}
-		}	
-	}
+            
+			
+    }     
+        
     tools {
         maven 'maven3.3.9'
         jdk 'openjdk8'
     }
-    environment {
+
+     environment {
         // This can be nexus3 or nexus2
         NEXUS_VERSION = "nexus3"
         // This can be http or https
         NEXUS_PROTOCOL = "http"
         // Where your Nexus is running
-        NEXUS_URL = "10.62.125.4:8084"
+        NEXUS_URL = "10.62.125.9:8084"
         //NEXUS_URL = "35.200.184.59:8081"
         // Repository where we will upload the artifact
         NEXUS_REPOSITORY = "maven-snapshots"
         // Jenkins credential id to authenticate to Nexus OSS
         NEXUS_CREDENTIAL_ID = "nexusadmin"
-    }
-    
+    }   
+
     post {
          always {
             echo 'JENKINS PIPELINE'
+            
 
         }
         success {
@@ -82,4 +169,14 @@ pipeline {
             echo 'JENKINS PIPELINE STATUS HAS CHANGED SINCE LAST EXECUTION'
         }
     }
+
+     
 }
+def getReleaseVersion() {
+                        def pom = readMavenPom file: 'pom.xml'
+                        print pom.version
+                        def versionNumber;
+                        versionNumber = env.BUILD_NUMBER;
+                        print versionNumber
+                        return pom.version.replace("-SNAPSHOT", ".${versionNumber}")
+                    }
