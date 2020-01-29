@@ -1,4 +1,4 @@
-	pipeline {
+pipeline {
     agent { label 'master' }
 	options { skipDefaultCheckout() }
     stages {
@@ -60,7 +60,9 @@
 					} */
 
 					stage('Staging Release version') {
-						
+						when {
+							 branch 'master'
+						 }						
 					    steps {
 							echo 'set version to Release'
 						script{
@@ -75,23 +77,27 @@
 					}		
 			
 			stage('Create the release tag') {
-				
+				when {
+							 branch 'master'
+						 }
 			    steps {
 				echo 'clean test'
 				script {
-				def releasedVersion = getReleaseVersion()
-				sh 'git status'
-				sh 'git add -- pom.xml'
-				sh "git commit -a -m 'Release${releasedVersion}'"
-				sh "git tag -a ${releasedVersion} -m 'Addressbook release-${releasedVersion}'"
-				sh "git push https://tonysandeep:Qwerty0420@github.com/tonysandeep/multi-pipeline-test.git ${releasedVersion}"
-					}
+					def releasedVersion = getReleaseVersion()
+					sh 'git status'
+					sh 'git add -- pom.xml'
+					sh "git commit -a -m 'Release${releasedVersion}'"
+					sh "git tag -a ${releasedVersion} -m 'Addressbook release-${releasedVersion}'"
+					sh "git push https://tonysandeep:Qwerty0420@github.com/tonysandeep/multi-pipeline-test.git ${releasedVersion}"
+				}
 
 			    }
 			}
 			
 			stage('Sanity Test') {
-				
+				when {
+							 branch 'master'
+						 }
 			    steps {
 				echo 'clean test'
 				checkout([  
@@ -102,7 +108,7 @@
 							submoduleCfg: [], 
 							userRemoteConfigs: [[credentialsId: 'rakeshgitvirtusatoken', url: 'https://github.com/tonysandeep/multi-pipeline-test.git']]
 						])
-				dir (release) {
+				dir('release') {
 					sh 'mvn clean test install'
 					}
 
@@ -110,19 +116,28 @@
 			}
         
 			stage("XLDeploy RELEASE Package") {
+					when {
+							 branch 'master'
+						 }
 					steps {
-						dir (release) {
+						dir('release') {
 						sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
 						xldCreatePackage artifactsPath: 'target', manifestPath: 'deployit-manifest.xml', darPath: '$JOB_NAME-$BUILD_NUMBER.0.dar'  
 						}
 					}
 			}
-			stage('XLDeploy Release artifact Publish') {  
+			stage('XLDeploy Release artifact Publish') { 
+				when {
+							 branch 'master'
+						 }
 				steps {
 						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$JOB_NAME-$BUILD_NUMBER.0.dar'
 				}
 			}  
 			stage('XLDeploy UAT Deploy') { 
+				when {
+							 branch 'master'
+						 }
 				steps {
 						xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: 'Applications/AddressBook/$BUILD_NUMBER.0'
 				}
