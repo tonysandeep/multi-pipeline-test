@@ -132,7 +132,7 @@ pipeline {
 							 branch 'master'
 						 }
 				steps {
-						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$JOB_NAME-$BUILD_NUMBER.0.dar'
+						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$BUILD_NUMBER.0.dar'
 				}
 			}  
 			stage('XLDeploy UAT Deploy') { 
