@@ -108,13 +108,7 @@ pipeline {
 				echo 'clean test'
 				cleanWs()
 				def releasedVersion = getReleaseVersion()
-				checkout([  
-							$class: 'GitSCM', 
-							branches: [[name: 'refs/tags/${releasedVersion}']], 
-							doGenerateSubmoduleConfigurations: false, 
-							extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], 
-							submoduleCfg: [], 
-							userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/tonysandeep/multi-pipeline-test.git']]
+				sh "git clone -b ${releasedVersion} https://github.com/tonysandeep/multi-pipeline-test.git"
 						])
 				
 					sh 'mvn clean test install'
