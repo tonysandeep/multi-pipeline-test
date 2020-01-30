@@ -129,7 +129,7 @@ pipeline {
 					steps {
 						dir('release'){
 							sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
-							xldCreatePackage artifactsPath: 'target', manifestPath: 'deployit-manifest.xml', darPath: '$BUILD_NUMBER.0.dar'  
+							xldCreatePackage artifactsPath: 'release/target', manifestPath: 'release/deployit-manifest.xml', darPath: 'release/$BUILD_NUMBER.0.dar'  
 						}
 					}
 			}
@@ -139,7 +139,7 @@ pipeline {
 						 }
 				steps {
 					dir('release') {
-						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$BUILD_NUMBER.0.dar'
+						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: 'release/$BUILD_NUMBER.0.dar'
 					}
 				}	
 			}
