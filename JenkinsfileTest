@@ -113,7 +113,7 @@ pipeline {
 						doGenerateSubmoduleConfigurations: false, 
 						extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'release']], 
 						submoduleCfg: [], 
-						userRemoteConfigs: [[credentialsId: '', url: 'https://github/tonysandeep/multi-pipeline-test.git']]
+						userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/tonysandeep/multi-pipeline-test.git']]
 					])
 					dir('release'){
 						sh 'mvn clean test install'
