@@ -87,7 +87,7 @@ pipeline {
 					sh 'git status'
 					sh 'git add -- pom.xml'
 					sh "git commit -a -m 'Release${releasedVersion}'"
-					sh "git tag -a ${releasedVersion} -m 'Addressbook release-${releasedVersion}'"
+					sh "git tag -a ${releasedVersion} -m 'Addressbook-${releasedVersion}'"
 					sh "git push https://tonysandeep:Qwerty0420@github.com/tonysandeep/multi-pipeline-test.git ${releasedVersion}"
 				}
 
@@ -99,11 +99,13 @@ pipeline {
 							 branch 'master'
 						 }
 			    steps {
+			    script{
 				echo 'clean test'
 				cleanWs()
+				def releasedVersion = getReleaseVersion()
 				checkout([  
 							$class: 'GitSCM', 
-							branches: [[name: 'refs/heads/master']], 
+							branches: [[name: '${releasedVersion}']], 
 							doGenerateSubmoduleConfigurations: false, 
 							extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], 
 							submoduleCfg: [], 
@@ -112,7 +114,7 @@ pipeline {
 				
 					sh 'mvn clean test install'
 					
-
+				}
 			    }
 			}
         
