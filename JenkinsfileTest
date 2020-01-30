@@ -106,11 +106,18 @@ pipeline {
 			    steps {
 			    script{
 				echo 'clean test'
-				cleanWs()
 				def releasedVersion = getReleaseVersion()
-				sh "git clone -b ${releasedVersion} https://github.com/tonysandeep/multi-pipeline-test.git"
-				sh 'mvn clean test install'
-					
+					checkout([  
+						$class: 'GitSCM', 
+						branches: [[name: "refs/tags/${releasedVersion}"]], 
+						doGenerateSubmoduleConfigurations: false, 
+						extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'release']], 
+						submoduleCfg: [], 
+						userRemoteConfigs: [[credentialsId: '', url: 'https://github/tonysandeep/multi-pipeline-test.git']]
+					])
+					dir('release'){
+						sh 'mvn clean test install'
+					}	
 				}
 			    }
 			}
@@ -120,10 +127,10 @@ pipeline {
 							 branch 'master'
 						 }
 					steps {
-						
-						sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
-						xldCreatePackage artifactsPath: 'target', manifestPath: 'deployit-manifest.xml', darPath: '$BUILD_NUMBER.0.dar'  
-						
+						dir('release'){
+							sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
+							xldCreatePackage artifactsPath: 'target', manifestPath: 'deployit-manifest.xml', darPath: '$BUILD_NUMBER.0.dar'  
+						}
 					}
 			}
 			stage('XLDeploy  Publish Release package') { 
@@ -131,15 +138,19 @@ pipeline {
 							 branch 'master'
 						 }
 				steps {
+					dir('release') {
 						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$BUILD_NUMBER.0.dar'
-				}
-			}  
+					}
+				}	
+			}
 			stage('UAT XL Release Deployment') { 
 				when {
 							 branch 'master'
 						 }
 				steps {
-						xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: 'Applications/AddressBook/$BUILD_NUMBER.0'
+					dir('release') {
+						xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: 'Applications/AddressBook-RELEASE/$BUILD_NUMBER.0'
+						}
 				}
 			}
             
