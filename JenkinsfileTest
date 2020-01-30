@@ -127,9 +127,14 @@ pipeline {
 							 branch 'master'
 						 }
 					steps {
-						dir('release'){
-							sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
-							xldCreatePackage artifactsPath: 'release/target', manifestPath: 'release/deployit-manifest.xml', darPath: 'release/$BUILD_NUMBER.0.dar'  
+					script {
+						dir('release') { 	
+							def releasedVersion = getReleaseVersion()
+						
+							sh "sed -i 's/{{PACKAGE_VERSION}}/${releasedVersion}.0/g' deployit-manifest.xml"
+							sh "sed -i 's/{{Deploy-App}}//g' deployit-manifest.xml"
+							xldCreatePackage artifactsPath: 'release/target', manifestPath: 'release/deployit-manifest.xml', darPath: 'release/${releasedVersion}.0.dar'  
+							}
 						}
 					}
 			}
@@ -138,8 +143,11 @@ pipeline {
 							 branch 'master'
 						 }
 				steps {
+					script {
 					dir('release') {
-						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$BUILD_NUMBER.0.dar'
+						def releasedVersion = getReleaseVersion()
+						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '${releasedVersion}.0.dar'
+					}
 					}
 				}	
 			}
@@ -148,9 +156,13 @@ pipeline {
 							 branch 'master'
 						 }
 				steps {
+					script {
 					dir('release') {
-						xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: 'Applications/AddressBook-RELEASE/$BUILD_NUMBER.0'
+						
+						def releasedVersion = getReleaseVersion()
+						xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: 'Applications/AddressBook-RELEASE/${releasedVersion}.0'
 						}
+					}
 				}
 			}
             
