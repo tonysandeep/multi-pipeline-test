@@ -132,7 +132,7 @@ pipeline {
 							def releasedVersion = getReleaseVersion()
 						
 							sh "sed -i 's/{{PACKAGE_VERSION}}/${releasedVersion}.0/g' deployit-manifest.xml"
-							sh "sed -i 's/{{Deploy-App}}//g' deployit-manifest.xml"
+							sh "sed -i 's/{{Deploy-App}}/AddressBook-RELEASE/g' deployit-manifest.xml"
 							xldCreatePackage artifactsPath: 'release/target', manifestPath: 'release/deployit-manifest.xml', darPath: 'release/${releasedVersion}.0.dar'  
 							}
 						}
@@ -146,7 +146,7 @@ pipeline {
 					script {
 					dir('release') {
 						def releasedVersion = getReleaseVersion()
-						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '${releasedVersion}.0.dar'
+						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: "${releasedVersion}.0.dar"
 					}
 					}
 				}	
@@ -160,7 +160,7 @@ pipeline {
 					dir('release') {
 						
 						def releasedVersion = getReleaseVersion()
-						xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: 'Applications/AddressBook-RELEASE/${releasedVersion}.0'
+						xldDeploy serverCredentials: 'XLDeployServer', environmentId: 'Environments/QATomcatENv', packageId: "Applications/AddressBook-RELEASE/${releasedVersion}.0"
 						}
 					}
 				}
