@@ -81,7 +81,7 @@ pipeline {
 						}
 					}		
 			
-			stage('Create the release tag') {
+			stage('Release Tag to SCM') {
 				when {
 							 branch 'master'
 						 }
@@ -139,7 +139,7 @@ pipeline {
 						 }
 				steps {
 					dir('release') {
-						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$BUILD_NUMBER.0.dar'
+						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: 'AddressBook -RELEASE/$BUILD_NUMBER.0.dar'
 					}
 				}	
 			}
