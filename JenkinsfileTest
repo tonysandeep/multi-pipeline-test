@@ -110,7 +110,7 @@ pipeline {
 				def releasedVersion = getReleaseVersion()
 				checkout([  
 							$class: 'GitSCM', 
-							branches: [[name: '${releasedVersion}']], 
+							branches: [[name: "${releasedVersion}"]], 
 							doGenerateSubmoduleConfigurations: false, 
 							extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], 
 							submoduleCfg: [], 
