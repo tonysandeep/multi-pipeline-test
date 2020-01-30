@@ -110,11 +110,11 @@ pipeline {
 				def releasedVersion = getReleaseVersion()
 				checkout([  
 							$class: 'GitSCM', 
-							branches: [[name: "${releasedVersion}"]], 
+							branches: "${releasedVersion}", 
 							doGenerateSubmoduleConfigurations: false, 
 							extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], 
 							submoduleCfg: [], 
-							userRemoteConfigs: [[credentialsId: 'rakeshgitvirtusatoken', url: 'https://github.com/tonysandeep/multi-pipeline-test.git']]
+							userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/tonysandeep/multi-pipeline-test.git']]
 						])
 				
 					sh 'mvn clean test install'
@@ -123,7 +123,7 @@ pipeline {
 			    }
 			}
         
-			stage("XLDeploy RELEASE Package") {
+			stage("Create RELEASE Package") {
 					when {
 							 branch 'master'
 						 }
@@ -134,7 +134,7 @@ pipeline {
 						
 					}
 			}
-			stage('XLDeploy Release artifact Publish') { 
+			stage('XLDeploy  Publish Release package') { 
 				when {
 							 branch 'master'
 						 }
@@ -142,7 +142,7 @@ pipeline {
 						xldPublishPackage serverCredentials: 'XLDeployServer', darPath: '$BUILD_NUMBER.0.dar'
 				}
 			}  
-			stage('XLDeploy UAT Deploy') { 
+			stage('UAT XL Release Deployment') { 
 				when {
 							 branch 'master'
 						 }
