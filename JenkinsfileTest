@@ -12,6 +12,9 @@ pipeline {
 				}
 		stage("Unit Test") {
 					agent { label 'windows' }
+										 when {
+					 		branch 'dev'
+					 }
 					steps {
 								cleanWs()
 								checkout scm
@@ -21,6 +24,9 @@ pipeline {
 						}
 				}
 	    			/*stage('Scanning for Security') {
+					 when {
+					 		branch 'dev'
+					 }
 					 steps {
 						fodStaticAssessment bsiToken: 'eyJ0ZW5hbnRJZCI6OTkyNCwidGVuYW50Q29kZSI6IkRYQ18xODAxX0ZNQV85MjY4ODYyMzciLCJyZWxlYXNlSWQiOjgyMTgyLCJwYXlsb2FkVHlwZSI6IkFOQUxZU0lTX1BBWUxPQUQiLCJhc3Nlc3NtZW50VHlwZUlkIjoxNCwidGVjaG5vbG9neVR5cGUiOiJKQVZBL0oyRUUiLCJ0ZWNobm9sb2d5VHlwZUlkIjo3LCJ0ZWNobm9sb2d5VmVyc2lvbiI6IjEuOCIsInRlY2hub2xvZ3lWZXJzaW9uSWQiOjEyLCJhdWRpdFByZWZlcmVuY2UiOiJBdXRvbWF0ZWQiLCJhdWRpdFByZWZlcmVuY2VJZCI6MiwiaW5jbHVkZVRoaXJkUGFydHkiOmZhbHNlLCJpbmNsdWRlT3BlblNvdXJjZUFuYWx5c2lzIjpmYWxzZSwicG9ydGFsVXJpIjoiaHR0cHM6Ly90cmlhbC5mb3J0aWZ5LmNvbS8iLCJhcGlVcmkiOiJodHRwczovL2FwaS50cmlhbC5mb3J0aWZ5LmNvbSIsInNjYW5QcmVmZXJlbmNlIjoiU3RhbmRhcmQiLCJzY2FuUHJlZmVyZW5jZUlkIjoxfQ==', entitlementPreference: 'SingleScanOnly', inProgressScanActionType: 'CancelInProgressScan', overrideGlobalConfig: true, personalAccessToken: 'fortifyondemand', remediationScanPreferenceType: 'RemediationScanIfAvailable', srcLocation: '.', tenantId: 'DXC_1801_FMA_926886237', username: 'tonisundhp@gmail.com'
 						fodPollResults bsiToken: 'eyJ0ZW5hbnRJZCI6OTkyNCwidGVuYW50Q29kZSI6IkRYQ18xODAxX0ZNQV85MjY4ODYyMzciLCJyZWxlYXNlSWQiOjgyMTgyLCJwYXlsb2FkVHlwZSI6IkFOQUxZU0lTX1BBWUxPQUQiLCJhc3Nlc3NtZW50VHlwZUlkIjoxNCwidGVjaG5vbG9neVR5cGUiOiJKQVZBL0oyRUUiLCJ0ZWNobm9sb2d5VHlwZUlkIjo3LCJ0ZWNobm9sb2d5VmVyc2lvbiI6IjEuOCIsInRlY2hub2xvZ3lWZXJzaW9uSWQiOjEyLCJhdWRpdFByZWZlcmVuY2UiOiJBdXRvbWF0ZWQiLCJhdWRpdFByZWZlcmVuY2VJZCI6MiwiaW5jbHVkZVRoaXJkUGFydHkiOmZhbHNlLCJpbmNsdWRlT3BlblNvdXJjZUFuYWx5c2lzIjpmYWxzZSwicG9ydGFsVXJpIjoiaHR0cHM6Ly90cmlhbC5mb3J0aWZ5LmNvbS8iLCJhcGlVcmkiOiJodHRwczovL2FwaS50cmlhbC5mb3J0aWZ5LmNvbSIsInNjYW5QcmVmZXJlbmNlIjoiU3RhbmRhcmQiLCJzY2FuUHJlZmVyZW5jZUlkIjoxfQ==', overrideGlobalConfig: true, personalAccessToken: 'fortifyondemand', pollingInterval: 1, tenantId: 'DXC_1801_FMA_926886237', username: 'tonisundhp@gmail.com'
@@ -29,6 +35,9 @@ pipeline {
 	    
 				stage('Build and Package') {
 					agent { label 'windows' }
+					 when {
+					 		branch 'dev'
+					 }
 						steps {
 								echo 'Clean Build'
 								sh "ls"
@@ -42,9 +51,7 @@ pipeline {
 				stage("XLDeploy Package") {
 					agent { label 'windows' }
 					 when {
-					   not {
-					 		branch 'master'
-					    }
+					 		branch 'dev'
 					 }
 				steps {
 					sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
@@ -56,10 +63,8 @@ pipeline {
 	    
 	    		stage('XLDeploy Publish') {  
 				agent { label 'windows' }
-				when {
-					   not {
-					 		branch 'master'
-					    }
+				 when {
+					 		branch 'dev'
 					 }
 				steps {
 					xldPublishPackage serverCredentials: 'XLDeployServer', darPath: "$BUILD_NUMBER.0.dar"
@@ -67,10 +72,8 @@ pipeline {
 			}
 		     	
 			stage('XL Release') {
-				 when {
-					   not {
-					 		branch 'master'
-					    }
+				  when {
+					 		branch 'dev'
 					 }
 				agent { label 'windows' }
                 		steps {
@@ -95,7 +98,7 @@ pipeline {
 			stage("Test Repo checkout") {
 			   agent { label 'windows' }
 				when {
-					branch 'dev'
+					branch 'QA'
 					not {
 					 		branch 'master'
 					    }
@@ -133,7 +136,7 @@ pipeline {
 		    	stage("API Smoke Test") {
 				agent { label 'windows' }
 				when {
-					branch 'dev'
+					branch 'QA'
 					not {
 					 		branch 'master'
 					    }
@@ -169,7 +172,7 @@ pipeline {
 			stage("Web Smoke Test") {
 					agent { label 'windows' }
 					when {
-						branch 'dev'
+						branch 'QA'
 					not {
 					 		branch 'master'
 					    }
@@ -205,7 +208,7 @@ pipeline {
 	    		stage("API Regression Test") {
 				agent { label 'windows' }
 				when {
-					branch 'dev'
+					branch 'QA'
 					not {
 					 		branch 'master'
 					    }
@@ -242,7 +245,7 @@ pipeline {
 			stage("Web Regression Test") {
 				agent { label 'windows' }
 				when {
-					branch 'dev'
+					branch 'QA'
 					not {
 					 		branch 'master'
 					    }
@@ -285,7 +288,7 @@ pipeline {
 			stage("Desktop Test") {
 				agent { label 'windows' }
 				when {
-					branch 'dev'
+					branch 'QA'
 					not {
 					 		branch 'master'
 					    }
@@ -324,7 +327,7 @@ pipeline {
 			stage("Cucumber Report generation") {
 				agent { label 'windows' }
 				when {
-					branch 'dev'
+					branch 'QA'
 					not {
 					 		branch 'master'
 					    }
