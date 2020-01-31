@@ -76,6 +76,7 @@ pipeline {
 			stage("Test Repo checkout") {
 			   agent { label 'windows' }
 				when {
+					branch 'dev'
 					not {
 					 		branch 'master'
 					    }
@@ -113,6 +114,7 @@ pipeline {
 		    	stage("API Smoke Test") {
 				agent { label 'windows' }
 				when {
+					branch 'dev'
 					not {
 					 		branch 'master'
 					    }
@@ -148,6 +150,7 @@ pipeline {
 			stage("Web Smoke Test") {
 					agent { label 'windows' }
 					when {
+						branch 'dev'
 					not {
 					 		branch 'master'
 					    }
@@ -183,6 +186,7 @@ pipeline {
 	    		stage("API Regression Test") {
 				agent { label 'windows' }
 				when {
+					branch 'dev'
 					not {
 					 		branch 'master'
 					    }
@@ -219,6 +223,7 @@ pipeline {
 			stage("Web Regression Test") {
 				agent { label 'windows' }
 				when {
+					branch 'dev'
 					not {
 					 		branch 'master'
 					    }
@@ -261,6 +266,7 @@ pipeline {
 			stage("Desktop Test") {
 				agent { label 'windows' }
 				when {
+					branch 'dev'
 					not {
 					 		branch 'master'
 					    }
@@ -299,6 +305,7 @@ pipeline {
 			stage("Cucumber Report generation") {
 				agent { label 'windows' }
 				when {
+					branch 'dev'
 					not {
 					 		branch 'master'
 					    }
