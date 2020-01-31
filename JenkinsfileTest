@@ -71,7 +71,7 @@ pipeline {
 				}
 			}
 		     	
-			stage('XL Release') {
+			/*stage('XL Release') {
 				  when {
 					 		branch 'dev'
 					 }
@@ -82,7 +82,7 @@ pipeline {
 
                			 }
 
-            		}
+            		}*/
 
 				/* stage('Test Automation') {
 				 	 when {
