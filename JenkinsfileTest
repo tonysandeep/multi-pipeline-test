@@ -80,7 +80,7 @@ pipeline {
 				}
 			}
 			
-			stage('Request to Pull Changes) {
+			stage('Request to Pull Changes') {
 				  when {
 					 		branch 'dev'
 					 }
