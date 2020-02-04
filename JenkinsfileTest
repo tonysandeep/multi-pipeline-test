@@ -1,23 +1,23 @@
 pipeline {
     agent { label 'master' }
-	options { skipDefaultCheckout() }
+	//options { skipDefaultCheckout() }
     stages {
 	 
-                stage("Checkout SCM") {
+                /*stage("Checkout SCM") {
 					steps {
 								cleanWs()
 								echo 'checkout scm'
 								checkout scm
 						}
-				}
+				}*/
 		stage("Unit Test") {
 					agent { label 'windows' }
-					 when {
+					/* when {
 					 	anyOf {
 							branch 'dev'
 							branch 'master'
 						}
-					 }
+					 }*/
 					steps {
 								cleanWs()
 								checkout scm
@@ -41,12 +41,12 @@ pipeline {
 	    
 				stage('Build and Package') {
 					agent { label 'windows' }
-					 when {
+					/* when {
 					 anyOf {
 							branch 'dev'
 							branch 'master'
 						}
-					 }
+					 }*/
 						steps {
 								echo 'Clean Build'
 								sh "ls"
@@ -59,9 +59,6 @@ pipeline {
 				
 				stage("XLDeploy Package") {
 					agent { label 'windows' }
-					 when {
-					 		branch 'dev'
-					 }
 				steps {
 					sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
 					sh "sed -i 's/{{Deploy-App}}/AddressBook/g' deployit-manifest.xml"
@@ -72,15 +69,13 @@ pipeline {
 	    
 	    		stage('XLDeploy Publish') {  
 				agent { label 'windows' }
-				 when {
-					 		branch 'dev'
-					 }
+				
 				steps {
 					xldPublishPackage serverCredentials: 'XLDeployServer', darPath: "$BUILD_NUMBER.0.dar"
 				}
 			}
 			
-			stage('Request to Pull Changes') {
+			/*stage('Request to Pull Changes') {
 				  when {
 					 		branch 'dev'
 					 }
@@ -90,7 +85,7 @@ pipeline {
 
                			 }
 
-            		}
+            		}*/
 		     	
 			/*stage('XL Release') {
 				  when {
