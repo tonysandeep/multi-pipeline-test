@@ -86,7 +86,7 @@ pipeline {
 					 }
                 		steps {
 
-                        			sh "hub pull-request -m "${BUILD_TAG}" -b master -h dev"
+                        			sh "hub pull-request -m '${BUILD_TAG}' -b master -h dev"
 
                			 }
 
