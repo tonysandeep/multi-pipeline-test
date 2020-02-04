@@ -59,9 +59,6 @@ pipeline {
 				
 				stage("XLDeploy Package") {
 					agent { label 'windows' }
-					 when {
-					 		branch 'dev'
-					 }
 				steps {
 					sh "sed -i 's/{{PACKAGE_VERSION}}/$BUILD_NUMBER.0/g' deployit-manifest.xml"
 					sh "sed -i 's/{{Deploy-App}}/AddressBook/g' deployit-manifest.xml"
@@ -72,15 +69,13 @@ pipeline {
 	    
 	    		stage('XLDeploy Publish') {  
 				agent { label 'windows' }
-				 when {
-					 		branch 'dev'
-					 }
+				
 				steps {
 					xldPublishPackage serverCredentials: 'XLDeployServer', darPath: "$BUILD_NUMBER.0.dar"
 				}
 			}
 			
-			stage('Request to Pull Changes') {
+			/*stage('Request to Pull Changes') {
 				  when {
 					 		branch 'dev'
 					 }
@@ -90,7 +85,7 @@ pipeline {
 
                			 }
 
-            		}
+            		}*/
 		     	
 			/*stage('XL Release') {
 				  when {
